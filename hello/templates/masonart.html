@@ -5,17 +5,39 @@
   <div class="container">
 
 
-<h2>Page View Report</h2>
-
-
-<ul>
-
-{% for greeting in greetings %}
-    <li>{{ greeting.when }}</li>
+<h2>As art</h2>
+<table border=1>
+{% for swatch_row in swatches_matrix %}
+	<tr>
+	{% for swatch in swatch_row %}
+		<td style="background-color: #{{ swatch.0 }}; height: 10px; width: 10px;"></td>
+	{% endfor %}
+	</tr>
 {% endfor %}
-
-</ul>
-
+</table>
 </div>
 
+<h2>As Array</h2>
+<table border=1>
+{% for swatch_row in swatches_matrix %}
+	<tr>
+	{% for swatch in swatch_row %}
+		<td>{{ swatch.1 }}</td>
+	{% endfor %}
+	</tr>
+{% endfor %}
+</table>
+
+
+
+<h2>As Supply List</h2>
+<table>
+	{% for swatch in swatch_counts %}
+	<tr>
+		<td>{{ swatch.0.1 }}</td>
+		<td>{{ swatch.1 }}</td>
+	</tr>
+	{% endfor %}
+</table>
+</div>
 {% endblock %}
