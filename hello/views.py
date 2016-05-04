@@ -40,17 +40,24 @@ def get_min_swatch(swatch_tuples, rgb):
 	return max(swatch_tuples, key=rgb_diff)
 
 
+def find_nearest_vector(array, value):
+	idx = np.array([np.linalg.norm(x+y+z) for (x,y,z) in array-value]).argmin()
+	return idx
+
 def break_image_down_into_grid_of_swatches(image, swatch_tuples):
 	image_arr = np.asarray(image)
 	height = image.size[0]
 	width = image.size[1]
 	image_arr_swatches = [[0 for i in range(height)] for j in range(width)]
+
+	from scipy import spatial
+	points = np.array([[swatch[0][0], swatch[0][1], swatch[0][2]] for swatch in swatch_tuples])
+	tree = spatial.KDTree(points)
 	list_of_swatches = {}
 	for i, row in enumerate(image_arr):
 		list_of_swatches[i] = {}
 		for j,col in enumerate(row):
-			min_swatch = get_min_swatch(swatch_tuples, col)
-			# image_arr_swatches[i][j] = min_swatch
+			min_swatch = swatch_tuples[tree.query(col, k=1)[1]]
 			color_tuple = min_swatch[0]
 			red_hex = "{0:x}".format(int(color_tuple[0]))
 			green_hex = "{0:x}".format(int(color_tuple[1]))
