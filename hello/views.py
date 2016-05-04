@@ -4,7 +4,9 @@ from django.http import HttpResponse
 from collections import Counter
 import urllib, cStringIO
 import numpy as np
+import random
 from .models import Greeting, Swatch
+from scipy import spatial
 
 # Create your views here.
 def index(request):
@@ -50,7 +52,6 @@ def break_image_down_into_grid_of_swatches(image, swatch_tuples):
 	width = image.size[1]
 	image_arr_swatches = [[0 for i in range(height)] for j in range(width)]
 
-	from scipy import spatial
 	points = np.array([[swatch[0][0], swatch[0][1], swatch[0][2]] for swatch in swatch_tuples])
 	tree = spatial.KDTree(points)
 	list_of_swatches = {}
@@ -87,9 +88,14 @@ def allcolors(request):
 	return render(request, 'allcolors.html', {'allcolors': swatch_tuples})
 
 def masonart(request):
-	swatch_tuples = [((swatch.red, swatch.green, swatch.blue), swatch.name) for swatch in Swatch.objects.all()]
 	URL = request.GET.get("URL", default="http://pic.1fotonin.com/data/wallpapers/60/WDF_1061456.jpg")
 	SIZE_RATIO = int(request.GET.get("SIZE_RATIO",default="50"))
+	LIMIT = float(request.GET.get("LIMIT",default="1"))
+
+	swatch_tuples = [((swatch.red, swatch.green, swatch.blue), swatch.name) for swatch in Swatch.objects.all()]
+	if LIMIT != 1:
+		sample_indexes = random.sample(xrange(len(swatch_tuples)), int(len(swatch_tuples) * LIMIT))
+		swatch_tuples = [swatch_tuples[i] for i in sample_indexes]
 
 	image = resize_image(URL, SIZE_RATIO)
 	list_of_swatches = break_image_down_into_grid_of_swatches(image, swatch_tuples)
