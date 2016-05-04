@@ -64,6 +64,21 @@ def get_counts_of_swatches(list_of_swatches):
 	swatch_counts = Counter([swatch for swatch_list in list_of_swatches for swatch in swatch_list])
 	return swatch_counts.most_common()
 
+def allcolors(request):
+	swatch_tuples = [
+		(
+			(
+				"{0:x}".format(swatch.red).zfill(2)+"{0:x}".format(swatch.green).zfill(2)+"{0:x}".format(swatch.blue).zfill(2)
+			), 
+			swatch.name,
+			(
+				swatch.red,swatch.green,swatch.blue
+			), 
+		) 
+		for swatch in Swatch.objects.all()
+	]
+	return render(request, 'allcolors.html', {'allcolors': swatch_tuples})
+
 def masonart(request):
 	swatch_tuples = [((swatch.red, swatch.green, swatch.blue), swatch.name) for swatch in Swatch.objects.all()]
 	URL = request.GET.get("URL", default="http://pic.1fotonin.com/data/wallpapers/60/WDF_1061456.jpg")
@@ -73,5 +88,5 @@ def masonart(request):
 	list_of_swatches = break_image_down_into_grid_of_swatches(image, swatch_tuples)
 	swatch_counts = get_counts_of_swatches(list_of_swatches)
 
-	return render(request, 'masonart.html', {'swatches_matrix': list_of_swatches, 'swatch_counts': swatch_counts})
+	return render(request, 'masonart.html', {'swatches_matrix': list_of_swatches, 'swatch_counts': swatch_counts, 'original_url': URL})
 

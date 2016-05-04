@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+  <div class="container">
+
+
+<h2>All color as exmaple</h2>
+<table>
+	{% for swatch in allcolors %}
+	<tr>
+		<td bgcolor="#{{ swatch.0 }}">
+			{{ swatch.0 }}
+		</td>
+		<td>
+			{{ swatch.2.0 }},
+			{{ swatch.2.1 }},
+			{{ swatch.2.2 }}
+		</td>
+		<td>
+			{{ swatch.1 }}
+		</td>
+	</tr>
+	{% endfor %}
+</table>
+</div>
+{% endblock %}

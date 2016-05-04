@@ -13,5 +13,6 @@ urlpatterns = [
     url(r'^$', hello.views.index, name='index'),
     url(r'^db', hello.views.db, name='db'),
     url(r'^masonart', hello.views.masonart, name='masonart'),
+    url(r'^allcolors', hello.views.allcolors, name='allcolors'),
     url(r'^admin/', include(admin.site.urls)),
 ]
