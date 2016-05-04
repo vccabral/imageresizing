@@ -90,11 +90,11 @@ def allcolors(request):
 def masonart(request):
 	URL = request.GET.get("URL", default="http://pic.1fotonin.com/data/wallpapers/60/WDF_1061456.jpg")
 	SIZE_RATIO = int(request.GET.get("SIZE_RATIO",default="50"))
-	LIMIT = float(request.GET.get("LIMIT",default="1"))
+	LIMIT = int(request.GET.get("LIMIT",default="1"))
 
 	swatch_tuples = [((swatch.red, swatch.green, swatch.blue), swatch.name) for swatch in Swatch.objects.all()]
 	if LIMIT != 1:
-		sample_indexes = random.sample(xrange(len(swatch_tuples)), int(len(swatch_tuples) * LIMIT))
+		sample_indexes = random.sample(xrange(len(swatch_tuples)), LIMIT)
 		swatch_tuples = [swatch_tuples[i] for i in sample_indexes]
 
 	image = resize_image(URL, SIZE_RATIO)
