@@ -101,5 +101,18 @@ def masonart(request):
 	list_of_swatches = break_image_down_into_grid_of_swatches(image, swatch_tuples)
 	swatch_counts = get_counts_of_swatches(list_of_swatches)
 
-	return render(request, 'masonart.html', {'swatches_matrix': list_of_swatches, 'swatch_counts': swatch_counts, 'original_url': URL})
+	height = len(list_of_swatches)
+	width = len(list_of_swatches[0])
+
+	return render(
+		request, 
+		'masonart.html', 
+		{
+			'swatches_matrix': list_of_swatches, 
+			'swatch_counts': swatch_counts, 
+			'original_url': URL,
+			'width': width,
+			'height': height
+		}
+	)
 
